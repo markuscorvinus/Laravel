@@ -25,3 +25,13 @@ Route::delete('/books/{book}-{slug}', 'BookController@destroy')->name('book.dele
 Route::post('/authors', 'AuthorController@store')->name('author.store');
 Route::patch('/authors/{author}', 'AuthorController@update')->name('author.update');
 Route::delete('/authors/{author}', 'AuthorController@destroy')->name('author.delete');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::post('/checkout/{book}', 'CheckoutBookController@store')->name('checkout');
+    Route::post('/checkin/{book}', 'CheckinBookController@store')->name('checkin');
+});
+
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');    
+
+
