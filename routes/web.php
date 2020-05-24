@@ -18,4 +18,10 @@ Route::get('/', function () {
 });
 
 Route::post('/books', 'BookController@store')->name('book.store');
-Route::patch('/books/{book}', 'BookController@update')->name('book.update');
+Route::patch('/books/{book}-{slug}', 'BookController@update')->name('book.update');
+Route::delete('/books/{book}-{slug}', 'BookController@destroy')->name('book.delete');
+
+
+Route::post('/authors', 'AuthorController@store')->name('author.store');
+Route::patch('/authors/{author}', 'AuthorController@update')->name('author.update');
+Route::delete('/authors/{author}', 'AuthorController@destroy')->name('author.delete');
