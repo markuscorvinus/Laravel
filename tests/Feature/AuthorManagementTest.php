@@ -31,4 +31,6 @@ class AuthorManagementTest extends TestCase
         $this->assertEquals('1998/15/05', $author->first()->dob->format('Y/d/m'));
         //$response->assertRedirect($book->path());
     }
-}
+
+
+}   
