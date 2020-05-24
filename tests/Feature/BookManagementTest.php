@@ -14,18 +14,17 @@ class BookReservationTest extends TestCase
     /** @test **/
     public function books_can_be_added()
     {   
-        $this->withoutExceptionHandling();
-
         $response = $this->post(route('book.store'),[
             'title' => 'The Old World',
             'author' => 'Sigmund Freud'
         ]);
         
-        
+        $book = Book::first();
 
-        $response->assertOk();
+        //$response->assertOk();
         //$response->assertStatus(201);
         $this->assertCount(1, Book::all());
+        $response->assertRedirect($book->path());
     }
 
     /** @test **/
@@ -62,6 +61,30 @@ class BookReservationTest extends TestCase
     /** @test **/
     public function a_book_can_be_updated()
     {   
+        //$this->withoutExceptionHandling();
+
+        $this->post(route('book.store'),[
+            'title' => 'This is a sample',
+            'author' => 'Victor Hugo'
+        ]);
+
+        $book = Book::first();
+        
+        $response = $this->patch($book->path(), [
+            'title' => 'This a new Title',
+            'author' => 'Boss Hugo',
+        ]);
+        
+
+        $this->assertEquals('This a new Title', Book::first()->title);
+        $this->assertEquals('Boss Hugo', Book::first()->author);
+        $response->assertRedirect($book->fresh()->path());
+    }
+
+
+    /** @test **/
+    public function a_book_can_be_deleted()
+    {   
         $this->withoutExceptionHandling();
 
         $this->post(route('book.store'),[
@@ -71,13 +94,11 @@ class BookReservationTest extends TestCase
 
         $book = Book::first();
         
-        $response = $this->patch('/books/'. $book->id, [
-            'title' => 'This a new Title',
-            'author' => 'Boss Hugo',
-        ]);
+        $this->assertCount(1, Book::all());
         
-
-        $this->assertEquals('This a new Title', Book::first()->title);
-        $this->assertEquals('Boss Hugo', Book::first()->author);
+        $response = $this->delete($book->path());
+        
+        $this->assertCount(0, Book::all());
+        $response->assertRedirect('/books');
     }
 }
