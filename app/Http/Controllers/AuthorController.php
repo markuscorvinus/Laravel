@@ -9,10 +9,7 @@ class AuthorController extends Controller
 {
     public function store(Request $request)
     {   
-        $author = Author::create($request->only([
-            'name','dob'
-        ]));
-
+        $author = Author::create($this->validateRequest());
         //return redirect($book->path());
     }
 

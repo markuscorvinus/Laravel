@@ -17,10 +17,7 @@ class AuthorManagementTest extends TestCase
     {   
         $this->withoutExceptionHandling();
 
-        $response = $this->post(route('author.store'),[
-            'name' => 'Sigmund Freud',
-            'dob' => '05/15/1998'
-        ]);
+        $response = $this->post(route('author.store'), $this->data());
         
         $author = Author::all();            
         
@@ -32,5 +29,29 @@ class AuthorManagementTest extends TestCase
         //$response->assertRedirect($book->path());
     }
 
+    /** @test **/
+    public function a_name_is_required()
+    {
+        $response = $this->post(route('author.store'), array_merge($this->data(), ['name' => '']));
+        
+        $response->assertSessionHasErrors('name');
+    }
 
+
+    /** @test **/
+    public function a_dob_is_required()
+    {
+        $response = $this->post(route('author.store'), array_merge($this->data(), ['dob' => '']));
+        
+        $response->assertSessionHasErrors('dob');
+    }
+
+
+    private function data()
+    {
+        return [
+            'name' => 'Sigmund Freud',
+            'dob' => '05/15/1998'
+        ];
+    }
 }   
